@@ -8,6 +8,7 @@
   "repository": "https://github.com/nanqiu/12sui.git",
   "devDependencies": {
     "gulp": "^3.8.11",
+    "gulp-markdown": "^1.0.0",
     "gulp-tap": "^0.1.3",
     "gulp-watermark": "0.0.1"
   },
