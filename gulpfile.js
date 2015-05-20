@@ -6,12 +6,12 @@ var imageminJpegtran = require('imagemin-jpegtran');
 var gm = require('gulp-gm');
 
 gulp.task('watermark', function() {
-    return gulp.src('./src/travel/newzealand/*.jpg')
-        //        .pipe(watermark({
-        //            image: './src/watermark/newzealand.png',
-        //            resize: '100%',
-        //            gravity: 'SouthEast'
-        //        }))
+    return gulp.src('./src/travel/newzealand/000.jpg')
+                .pipe(watermark({
+                    image: './src/watermark/newzealand.png',
+                    resize: '60%',
+                    gravity: 'SouthEast'
+                }))
         //.pipe(smushit())
         .pipe(gm(function(gmfile, done) {
             gmfile.size(function(err, size) {
