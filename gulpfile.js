@@ -9,7 +9,6 @@ gulp.task('watermark', function() {
     return gulp.src('/Users/nannan/Documents/thailand/*.jpg')
                 .pipe(watermark({
                     image: './src/watermark/thailand.png',
-                    resize: '60%',
                     gravity: 'SouthEast'
                 }))
         .pipe(gm(function(gmfile, done) {
