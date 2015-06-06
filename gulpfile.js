@@ -6,13 +6,12 @@ var imageminJpegtran = require('imagemin-jpegtran');
 var gm = require('gulp-gm');
 
 gulp.task('watermark', function() {
-    return gulp.src('./src/travel/newzealand/000.jpg')
+    return gulp.src('/Users/nannan/Documents/thailand/*.jpg')
                 .pipe(watermark({
-                    image: './src/watermark/newzealand.png',
+                    image: './src/watermark/thailand.png',
                     resize: '60%',
                     gravity: 'SouthEast'
                 }))
-        //.pipe(smushit())
         .pipe(gm(function(gmfile, done) {
             gmfile.size(function(err, size) {
                 done(null, gmfile.resize(
@@ -22,5 +21,5 @@ gulp.task('watermark', function() {
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./src/travel/thailand'));
 });
