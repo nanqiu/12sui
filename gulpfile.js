@@ -16,9 +16,10 @@ var mincss = require('gulp-minify-css');
 var sizeOf = require('image-size');
 
 gulp.task('watermark', function() {
-    return gulp.src('/Users/nannan/Documents/thailand/*.jpg')
+    return gulp.src('/Users/nannan/Documents/test/*.jpg')
         .pipe(watermark({
-            image: './src/watermark/thailand.png',
+            image: './src/watermark/yunnan.png',
+            //resize: '60%',
             gravity: 'SouthEast'
         }))
         .pipe(gm(function(gmfile, done) {
@@ -30,7 +31,7 @@ gulp.task('watermark', function() {
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./src/travel/thailand'));
+        .pipe(gulp.dest('./src/travel/yunnan'));
 });
 
 gulp.task('clean', function() {
@@ -61,9 +62,19 @@ gulp.task('imagesize', function() {
 });
 
 // 生成文章 id
+var ids = {};
+
 function getId(name) {
     return name.replace(/^(\d{4}\.\d{2}\.\d{2})\s(.+)$/, function(all, date, str) {
-        return date.replace(/\./g, '') + '-' + str.length;
+        var ret = date.replace(/\./g, '') + '-' + str.length;
+        if (ids[ret]) {
+            if (name !== ids[ret]) {
+                console.error('重复 id：' + ids[ret] + ', ' + name);
+            }
+        } else {
+            ids[ret] = name;
+        }
+        return ret;
     });
 }
 
