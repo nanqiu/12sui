@@ -13,6 +13,7 @@ var file = require('gulp-file');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var mincss = require('gulp-minify-css');
+var sizeOf = require('image-size');
 
 gulp.task('watermark', function() {
     return gulp.src('/Users/nannan/Documents/thailand/*.jpg')
@@ -48,6 +49,17 @@ var hash = {
     stamp: '邮票'
 };
 
+var imageSize = {};
+
+gulp.task('imagesize', function() {
+
+    return gulp.src('./src/**/*.jpg')
+        .pipe(tap(function(file) {
+            imageSize[path.relative('./', file.path)] = sizeOf(file.path);
+        }));
+
+});
+
 // 生成文章 id
 function getId(name) {
     return name.replace(/^(\d{4}\.\d{2}\.\d{2})\s(.+)$/, function(all, date, str) {
@@ -55,7 +67,9 @@ function getId(name) {
     });
 }
 
-gulp.task('article', ['clean'], function() {
+gulp.task('article', ['clean', 'imagesize'], function() {
+
+    //console.log(imageSize);
 
     return gulp.src('./src/**/*.md')
         .pipe(tap(function(file) {
@@ -80,11 +94,14 @@ gulp.task('article', ['clean'], function() {
             });
         }))
         .pipe(markdown())
-				.pipe(tap(function(file) {
-						file.contents = new Buffer(
-							file.contents.toString().replace(/(<img\ssrc=)/g, '$1"about:blank" class="lazy" data-original=')
-						);	
-				}))
+        .pipe(tap(function(file) {
+            file.contents = new Buffer(
+                file.contents.toString().replace(/(<img\ssrc=)"([^"]+)"/g, function(all, prefix, href) {
+                    var size = imageSize[href];
+                    return prefix + '"about:blank" class="lazy" data-original="' + href + '" width="' + size.width + '" height="' + size.height + '"';
+                })
+            );
+        }))
         .pipe(rename(function(path) {
             path.dirname = '';
             path.basename = getId(path.basename);
@@ -118,7 +135,7 @@ gulp.task('list', ['article'], function() {
 });
 
 gulp.task('concat', ['clean'], function() {
-    return gulp.src(['./src/assets/jquery-2.1.4.min.js', './src/assets/underscore-min.js', './src/assets/backbone-min.js', './src/assets/jquery.lazyload.js'])
+    return gulp.src(['./src/assets/jquery-2.1.4.min.js', './src/assets/underscore-min.js', './src/assets/backbone-min.js', './src/assets/jquery.lazyload.min.js'])
         .pipe(concat('base.js'))
         .pipe(tap(function(file) {
             file.contents = new Buffer(

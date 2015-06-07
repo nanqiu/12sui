@@ -5,6 +5,8 @@
         return '您的浏览器不支持该网站，请升级！';
     }
 
+    var cache = {};
+
     // model
     var Model = Backbone.Model.extend({
 
@@ -27,12 +29,16 @@
         // 读取文章
         getArticle: function(id) {
             var host = this;
+            if (cache[id]) {
+                return host.set('article', cache[id]);
+            }
             $.ajax({
                 url: './article/' + id + '.html',
                 type: 'get',
                 dateType: 'text',
                 success: function(data) {
                     host.set('article', data);
+                    cache[id] = data;
                 },
                 failure: function() {
                     alert('文章读取失败，请刷新重试！');
@@ -166,7 +172,7 @@
                 this.list('article');
             }
             this.model.set('articleId', query);
-            window.scrollTo(0, $('.main').offset().top);
+            window.scrollTo(0, $('article').offset().top);
         },
 
         tag: function(query) {
