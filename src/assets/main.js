@@ -113,7 +113,10 @@
                 .html(this.model.get('article') || '<div class="no-article">暂无文章信息！</div>')
                 .appendTo('article')
                 .parent()
-                .addClass('hide-loading');
+                .addClass('hide-loading')
+                .end()
+                .find('img.lazy')
+                .lazyload();
         }
     });
 

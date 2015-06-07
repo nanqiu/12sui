@@ -80,6 +80,11 @@ gulp.task('article', ['clean'], function() {
             });
         }))
         .pipe(markdown())
+				.pipe(tap(function(file) {
+						file.contents = new Buffer(
+							file.contents.toString().replace(/(<img\ssrc=)/g, '$1"about:blank" class="lazy" data-original=')
+						);	
+				}))
         .pipe(rename(function(path) {
             path.dirname = '';
             path.basename = getId(path.basename);
@@ -113,7 +118,7 @@ gulp.task('list', ['article'], function() {
 });
 
 gulp.task('concat', ['clean'], function() {
-    return gulp.src(['./src/assets/jquery-2.1.4.min.js', './src/assets/underscore-min.js', './src/assets/backbone-min.js'])
+    return gulp.src(['./src/assets/jquery-2.1.4.min.js', './src/assets/underscore-min.js', './src/assets/backbone-min.js', './src/assets/jquery.lazyload.js'])
         .pipe(concat('base.js'))
         .pipe(tap(function(file) {
             file.contents = new Buffer(
