@@ -10,6 +10,9 @@ var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var path = require('path');
 var file = require('gulp-file');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var mincss = require('gulp-minify-css');
 
 gulp.task('watermark', function() {
     return gulp.src('/Users/nannan/Documents/thailand/*.jpg')
@@ -30,8 +33,10 @@ gulp.task('watermark', function() {
 });
 
 gulp.task('clean', function() {
-    return gulp.src('./dist/')
-        .pipe(rimraf());
+    return gulp.src('./res/')
+        .pipe(rimraf({
+            force: true
+        }));
 });
 
 var lists = [];
@@ -65,7 +70,7 @@ gulp.task('article', ['clean'], function() {
             file.contents = new Buffer(
                 file.contents.toString()
                 .replace(/(\]\()\.\//g, '$1' + path.relative('./', file.path.replace(/\/[^\/]+$/, '/')) + '/')
-                .replace(/(^#\s.+\n)/, '$1>发表时间：' + date + '，所属分类：' + hash[tag] + '\n')
+                .replace(/(^#\s.+\n)/, '$1>发表时间：' + date + '，所属分类：<a href="#tag/' + tag + '">' + hash[tag] + '</a>\n')
             );
             lists.push({
                 title: title,
@@ -107,4 +112,27 @@ gulp.task('list', ['article'], function() {
     }).pipe(gulp.dest('./article'));
 });
 
-gulp.task('default', ['clean', 'article', 'list']);
+gulp.task('concat', ['clean'], function() {
+    return gulp.src(['./src/assets/jquery-2.1.4.min.js', './src/assets/underscore-min.js', './src/assets/backbone-min.js'])
+        .pipe(concat('base.js'))
+        .pipe(tap(function(file) {
+            file.contents = new Buffer(
+                file.contents.toString().replace(/\/\/#\ssourceMappingURL.+\n*/g, '')
+            );
+        }))
+        .pipe(gulp.dest('./res/'));
+});
+
+gulp.task('uglify', ['clean'], function() {
+    return gulp.src('./src/assets/main.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./res/'));
+});
+
+gulp.task('cssmin', ['clean'], function() {
+    return gulp.src('./src/assets/*.css')
+        .pipe(mincss())
+        .pipe(gulp.dest('./res/'));
+});
+
+gulp.task('default', ['clean', 'article', 'list', 'concat', 'uglify', 'cssmin']);
