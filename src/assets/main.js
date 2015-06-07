@@ -5,6 +5,10 @@
         return '您的浏览器不支持该网站，请升级！';
     }
 
+    if (/Mac\s+OS/.test(navigator.userAgent)) {
+        $('body').addClass('sys-mac');
+    }
+
     var cache = {};
 
     // model
