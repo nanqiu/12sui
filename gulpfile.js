@@ -139,7 +139,7 @@ gulp.task('list', ['article'], function() {
         lists: lists.sort(function(a, b) {
             return a.date > b.date ? -1 : 1;
         })
-    }, null, 4);
+    });
     return file('list.json', content, {
         src: true
     }).pipe(gulp.dest('./article'));
