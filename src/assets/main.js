@@ -101,13 +101,13 @@
                         .addClass('hidden')
                         .filter('.tag-' + this.model.get('tagId'))
                         .removeClass('hidden');
+										this.model.set('articleId', els.length ? $('a', els[0]).attr('href').replace(/^.+\//, '') : null);
                 } else {
                     els = this.$el
                         .find('.list')
                         .find('li')
                         .removeClass('hidden');
                 }
-                this.model.set('articleId', els.length ? $('a', els[0]).attr('href').replace(/^.+\//, '') : null);
             }
         }
     });
