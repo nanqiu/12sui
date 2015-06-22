@@ -18,7 +18,7 @@ var sizeOf = require('image-size');
 gulp.task('watermark', function() {
     return gulp.src('/Users/nannan/Documents/test/*.jpg')
         .pipe(watermark({
-            image: './src/watermark/yunnan.png',
+            image: './src/watermark/longmen.png',
             //resize: '60%',
             gravity: 'SouthEast'
         }))
@@ -31,7 +31,7 @@ gulp.task('watermark', function() {
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./src/travel/yunnan'));
+        .pipe(gulp.dest('./src/travel/longmen'));
 });
 
 gulp.task('clean', function() {
