@@ -16,22 +16,22 @@ var mincss = require('gulp-minify-css');
 var sizeOf = require('image-size');
 
 gulp.task('watermark', function() {
-    return gulp.src('/Users/nannan/Documents/test/*.jpg')
+    return gulp.src('/Users/nannan/Documents/test/*.png')
         .pipe(watermark({
-            image: './src/watermark/longmen.png',
+            image: './src/watermark/12.png',
             //resize: '60%',
             gravity: 'SouthEast'
         }))
         .pipe(gm(function(gmfile, done) {
             gmfile.size(function(err, size) {
                 done(null, gmfile.resize(
-                    size.width * 0.5,
-                    size.height * 0.5
+                    size.width * 1,
+                    size.height * 1
                 ));
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./src/travel/longmen'));
+        .pipe(gulp.dest('./src/travel/xitianmu'));
 });
 
 gulp.task('clean', function() {
@@ -54,7 +54,7 @@ var imageSize = {};
 
 gulp.task('imagesize', function() {
 
-    return gulp.src('./src/**/*.jpg')
+    return gulp.src(['./src/**/*.jpg', './src/**/*.png', '!./src/watermark/*.png'])
         .pipe(tap(function(file) {
             imageSize[path.relative('./', file.path)] = sizeOf(file.path);
         }));
