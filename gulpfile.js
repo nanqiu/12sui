@@ -16,22 +16,22 @@ var mincss = require('gulp-minify-css');
 var sizeOf = require('image-size');
 
 gulp.task('watermark', function() {
-    return gulp.src('/Users/nannan/Documents/test/*.png')
+    return gulp.src('/Users/nannan/Documents/test/*.jpg')
         .pipe(watermark({
             image: './src/watermark/12.png',
-            //resize: '60%',
+            //resize: '50%',
             gravity: 'SouthEast'
         }))
         .pipe(gm(function(gmfile, done) {
             gmfile.size(function(err, size) {
                 done(null, gmfile.resize(
-                    size.width * 1,
-                    size.height * 1
+                    size.width * 0.5,
+                    size.height * 0.5
                 ));
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./src/travel/xitianmu'));
+        .pipe(gulp.dest('./src/travel/neimeng'));
 });
 
 gulp.task('clean', function() {
