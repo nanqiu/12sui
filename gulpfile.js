@@ -31,7 +31,7 @@ gulp.task('watermark', function() {
             });
         }))
         .pipe(imageminJpegtran()())
-        .pipe(gulp.dest('./src/travel/neimeng'));
+        .pipe(gulp.dest('./src/travel/dongtianmu'));
 });
 
 gulp.task('clean', function() {
