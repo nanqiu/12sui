@@ -19,7 +19,7 @@ gulp.task('watermark', function() {
     return gulp.src('/Users/nannan/Documents/test/*.jpg')
         .pipe(watermark({
             image: './src/watermark/12.png',
-            //resize: '50%',
+            resize: '60%',
             gravity: 'SouthEast'
         }))
         .pipe(gm(function(gmfile, done) {
